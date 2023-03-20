@@ -4,10 +4,11 @@ import { Home, Login } from '../pages';
 import { Loader, Navbar } from './';
 
 import {
-  createBrowserRouter,
   RouterProvider,
   Route,
   Link,
+  BrowserRouter,
+  Routes,
 } from "react-router-dom";
 
 const About = () => {
@@ -44,34 +45,18 @@ function App() {
     return <Loader />;
   }
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: (
-        <Home posts={posts} />
-      ),
-    },
-    {
-      path: "/about",
-      element: <About />
-    },
-    {
-      path: "/login",
-      element: <Login />
-    },
-    {
-      path: "/user/userId",
-      element: <Userinfo />
-    },
-    // {
-    //   element: <Page404 />
-    // },
-  ]);
-
   return (
     <div className="App">
+      <BrowserRouter>
       <Navbar />
-      <RouterProvider router={router} />
+      <Routes>
+        <Route path='/' element={<Home posts={posts} />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/user/userId' element={<Userinfo />} />
+        <Route element={<Page404 />} />
+      </Routes>
+      </BrowserRouter>
     </div>
   );
 }

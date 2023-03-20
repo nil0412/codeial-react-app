@@ -1,40 +1,40 @@
-import styles from '../styles/navbar.module.css';
 import { Link } from 'react-router-dom';
+import styles from '../styles/navbar.module.css';
 
 const Navbar = () => {
   return (
     <div className={styles.nav}>
       <div className={styles.leftDiv}>
-        <a to="/">
+        <Link to="/">
           <img
             src="https://ninjasfiles.s3.amazonaws.com/0000000000003454.png"
             alt="app-logo"
           />
-        </a>
+        </Link>
       </div>
 
       <div className={styles.rightNav}>
         <div className={styles.user}>
-          <a href="/">
+          <Link to="/">
             <img
               src="https://cdn-icons-png.flaticon.com/512/1144/1144709.png"
               alt="user-icon"
               className={styles.userDp}
             />
-          </a>
+          </Link>
           <span>Nilesh</span>
         </div>
 
         <div className={styles.navLinks}>
           <ul>
             <li>
-              <a href="/">Log in</a>
+              <Link to="/login">Log in</Link>
             </li>
             <li>
-              <a href="/">Log out</a>
+              <Link to="/">Log out</Link>
             </li>
             <li>
-              <a href="/">Register</a>
+              <Link to="/">Register</Link>
             </li>
           </ul>
         </div>
