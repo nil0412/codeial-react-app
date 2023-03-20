@@ -1,10 +1,11 @@
 import styles from '../styles/navbar.module.css';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
     <div className={styles.nav}>
       <div className={styles.leftDiv}>
-        <a href="/">
+        <a to="/">
           <img
             src="https://ninjasfiles.s3.amazonaws.com/0000000000003454.png"
             alt="app-logo"

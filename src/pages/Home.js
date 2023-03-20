@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import styles from '../styles/home.module.css';
+import Comment from "./Comment";
 
 const Home = ({ posts }) => {
   return (
@@ -41,18 +42,9 @@ const Home = ({ posts }) => {
             </div>
 
             <div className={styles.postCommentsList}>
-              <div className={styles.postCommentItem}>
-                <div className={styles.postCommentHeader}>
-                  <span className={styles.postCommentAuthor}>Bill</span>
-                  <span className={styles.postCommentTime}>a minute ago</span>
-                  <span className={styles.postCommentLikes}>
-                    <i className="fa-solid fa-heart" style={{ color: '#FF0000' }}></i>{' '}
-                    22
-                  </span>
-                </div>
-
-                <div className={styles.postCommentContent}>Random comment</div>
-              </div>
+              {post.comments.map((comment) => {
+                <Comment comment={comment} />
+              })}
             </div>
           </div>
         </div>
