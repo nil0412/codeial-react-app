@@ -1,8 +1,38 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { getPosts } from '../api';
+import { Loader } from '../components';
 import styles from '../styles/home.module.css';
-import Comment from "./Comment";
+import Comment from './Comment';
 
-const Home = ({ posts }) => {
+const Home = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  console.log('In Home');
+
+  const fetchPosts = async () => {
+    const response = await getPosts();
+
+    if (response.success) {
+      setPosts(response.data.posts);
+      console.log(posts);
+    } else {
+      console.error(response.message);
+    }
+
+    setLoading(false);
+    console.log(loading);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <div className={styles.postsList}>
       {posts.map((post) => (
@@ -43,7 +73,7 @@ const Home = ({ posts }) => {
 
             <div className={styles.postCommentsList}>
               {post.comments.map((comment) => {
-                <Comment comment={comment} />
+                <Comment comment={comment} />;
               })}
             </div>
           </div>
@@ -54,7 +84,7 @@ const Home = ({ posts }) => {
 };
 
 Home.propTypes = {
-  posts: PropTypes.array.isRequired
-}
+  posts: PropTypes.array.isRequired,
+};
 
 export default Home;
