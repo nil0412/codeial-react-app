@@ -14,7 +14,7 @@ const Signup = () => {
   const { addToast } = useToasts();
   const auth = useAuth();
   const navigate = useNavigate();
-
+  
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setSigningUp(true);
@@ -42,6 +42,7 @@ const Signup = () => {
     }
 
     const response = await auth.signup(name, email, password, confirmPassword);
+    console.log(response);
 
     if (response.success) {
       navigate('/login');
@@ -75,7 +76,7 @@ const Signup = () => {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          autoComplete="new-password"
+          // autoComplete="new-password"
         />
       </div>
       <div className={styles.field}>
@@ -84,12 +85,12 @@ const Signup = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          autoComplete="new-password"
+          // autoComplete="new-password"
         />
       </div>
       <div className={styles.field}>
         <input
-          placeholder="Confirm password"
+          placeholder="password"
           type="password"
           required
           value={password}
@@ -98,7 +99,7 @@ const Signup = () => {
       </div>
       <div className={styles.field}>
         <input
-          placeholder="Password"
+          placeholder="Confirm Password"
           type="password"
           required
           value={confirmPassword}

@@ -1,6 +1,6 @@
 import { getPosts } from '../api';
 import { useEffect, useState } from 'react';
-import { Home, Login } from '../pages';
+import { Home, Login, Signup } from '../pages';
 import { Loader, Navbar } from './';
 import { useAuth } from '../hooks';
 import {
@@ -19,10 +19,10 @@ function App() {
   console.log("In App");
   const auth = useAuth();
 
-  // if (auth.loading) {
-  //   console.log("auth.loading");
-  //   return <Loader />;
-  // }
+  if (auth.loading) {
+    console.log("auth.loading");
+    return <Loader />;
+  }
 
   return (
     <div className="App">
@@ -31,6 +31,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Signup />} />
         <Route element={<Page404 />} />
       </Routes>
       </BrowserRouter>

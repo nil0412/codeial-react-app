@@ -1,6 +1,6 @@
 import Home from './Home';
 import Login from './Login';
-// import Signup from './Signup';
+import Signup from './Signup';
 // import Settings from './Settings';
 // import UserProfile from './UserProfile';
 
@@ -8,5 +8,6 @@ import Login from './Login';
 
 export{
     Home,
-    Login
+    Login,
+    Signup
 }
