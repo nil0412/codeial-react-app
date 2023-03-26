@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
 import { useAuth } from '../hooks';
@@ -14,7 +14,7 @@ const Signup = () => {
   const { addToast } = useToasts();
   const auth = useAuth();
   const navigate = useNavigate();
-  
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setSigningUp(true);
@@ -62,10 +62,6 @@ const Signup = () => {
     setSigningUp(false);
   };
 
-  if (auth.user) {
-    return <Navigate to="/" />;
-  }
-
   return (
     <form className={styles.loginForm} onSubmit={handleFormSubmit}>
       <span className={styles.loginSignupHeader}> Signup</span>
@@ -74,7 +70,7 @@ const Signup = () => {
           placeholder="Name"
           type="text"
           required
-          value={name}
+          // value={name}
           onChange={(e) => setName(e.target.value)}
           // autoComplete="new-password"
         />
@@ -83,7 +79,7 @@ const Signup = () => {
         <input
           placeholder="Email"
           type="email"
-          value={email}
+          // value={email}
           onChange={(e) => setEmail(e.target.value)}
           // autoComplete="new-password"
         />
@@ -93,7 +89,7 @@ const Signup = () => {
           placeholder="password"
           type="password"
           required
-          value={password}
+          // value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
@@ -102,7 +98,7 @@ const Signup = () => {
           placeholder="Confirm Password"
           type="password"
           required
-          value={confirmPassword}
+          // value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
       </div>

@@ -9,20 +9,16 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log('In Home');
-
   const fetchPosts = async () => {
     const response = await getPosts();
 
     if (response.success) {
       setPosts(response.data.posts);
-      console.log(posts);
     } else {
       console.error(response.message);
     }
 
     setLoading(false);
-    console.log(loading);
   };
 
   useEffect(() => {

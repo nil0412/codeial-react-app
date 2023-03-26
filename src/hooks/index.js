@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../providers/AuthProvider';
-import { login as userLogin, register } from '../api';
+import { editprofile, login as userLogin, register } from '../api';
 import {
   getItemFromLocalStorage,
   LOCALSTORAGE_TOKEN_KEY,
   removeItemFromLocalStorage,
   setItemInLocalStorage,
 } from '../utils';
-import jwtDecode from 'jwt-decode';
+import jwt from 'jwt-decode';
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -21,12 +21,31 @@ export const useProvideAuth = () => {
     const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
 
     if (userToken) {
-      const user = jwtDecode(userToken);
-
+      const user = jwt(userToken);
       setUser(user);
     }
     setLoading(false);
   }, []);
+
+  const updateUser = async (userId, name, password, confirmPassword) => {
+    const response = await editprofile(userId, name, password, confirmPassword);
+    console.log(response);
+    if (response.success) {
+      setUser(response.data.user);
+      setItemInLocalStorage(
+        LOCALSTORAGE_TOKEN_KEY,
+        response.data.token ? response.data.token : null
+      );
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+        message: response.message,
+      };
+    }
+  };
 
   const login = async (email, password) => {
     const response = await userLogin(email, password);
@@ -35,7 +54,7 @@ export const useProvideAuth = () => {
       setUser(response.data.user);
       setItemInLocalStorage(
         LOCALSTORAGE_TOKEN_KEY,
-        response.data.user ? response.data.user : null
+        response.data.token ? response.data.token : null
       );
       return {
         success: true,
@@ -50,7 +69,6 @@ export const useProvideAuth = () => {
 
   const signup = async (name, email, password, confirmPassword) => {
     const response = await register(name, email, password, confirmPassword);
-    console.log("->",password,"<->",confirmPassword,"<-");
     if (response.success) {
       return {
         success: true,
@@ -59,7 +77,7 @@ export const useProvideAuth = () => {
       return {
         success: false,
         message: response.message,
-        response
+        response,
       };
     }
   };
@@ -74,6 +92,7 @@ export const useProvideAuth = () => {
     login,
     signup,
     logout,
+    updateUser,
     loading,
   };
 };

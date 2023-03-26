@@ -1,9 +1,9 @@
 import { useState } from 'react';
-// import { Navigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
 import styles from '../styles/login.module.css';
 import { useAuth } from '../hooks';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +11,7 @@ const Login = () => {
   const [loggingIn, setLoggingIn] = useState(false);
   const { addToast } = useToasts();
   const auth = useAuth();
-  console.log(auth);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,12 +24,12 @@ const Login = () => {
     }
     const response = await auth.login(email, password);
 
-    if(response.success){
+    if (response.success) {
+      navigate('/');
       addToast('Successfully logged in', {
         appearance: 'success',
       });
-    }
-    else{
+    } else {
       addToast(response.message, {
         appearance: 'error',
       });
@@ -61,7 +61,9 @@ const Login = () => {
       </div>
 
       <div className={styles.field}>
-        <button disabled={loggingIn}>{loggingIn ? 'Logging in ...' : 'Log In'}</button>
+        <button disabled={loggingIn}>
+          {loggingIn ? 'Logging in ...' : 'Log In'}
+        </button>
       </div>
     </form>
   );

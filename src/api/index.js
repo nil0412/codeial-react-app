@@ -21,7 +21,6 @@ const customFetch = async (url, { body, ...customConfig }) => {
 
   if (body) {
     config.body = getFormBody(body);
-    console.log(body, "<->", config.body); 
   }
 
   try {
@@ -60,6 +59,13 @@ export const login = (email, password) => {
 export const register = (name, email, password, confirmPassword) => {
   return customFetch(API_URLS.signup(), {
     method: 'POST',
-    body: { name, email, password, confirmPassword}
+    body: { name, email, password, confirm_password: confirmPassword}
+  });
+}
+
+export const  editprofile = async(userId, name, password, confirmPassword) => {
+  return customFetch(API_URLS.editUser(), {
+    method: 'POST',
+    body: { id: userId, name, password, confirm_password: confirmPassword}
   });
 }

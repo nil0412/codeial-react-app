@@ -1,39 +1,42 @@
-import { getPosts } from '../api';
-import { useEffect, useState } from 'react';
-import { Home, Login, Signup } from '../pages';
+import { Home, Login, Settings, Signup } from '../pages';
 import { Loader, Navbar } from './';
 import { useAuth } from '../hooks';
-import {
-  RouterProvider,
-  Route,
-  Link,
-  BrowserRouter,
-  Routes,
-} from "react-router-dom";
+import { Route, BrowserRouter, Routes, Navigate } from 'react-router-dom';
 
 const Page404 = () => {
   return <h1>Page404</h1>;
 };
 
+
+
+
 function App() {
-  console.log("In App");
   const auth = useAuth();
 
   if (auth.loading) {
-    console.log("auth.loading");
     return <Loader />;
   }
 
   return (
     <div className="App">
       <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Signup />} />
-        <Route element={<Page404 />} />
-      </Routes>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/login"
+            element={auth.user ? <Navigate to="/" /> : <Login />}
+          />
+          <Route
+            path="/register"
+            element={auth.user ? <Navigate to="/" /> : <Signup />}
+          />
+          <Route
+            path="/settings"
+            element={auth.user ? <Settings /> : <Navigate to="/login" />}
+          />
+          <Route path='*' element={<Page404 />} />
+        </Routes>
       </BrowserRouter>
     </div>
   );
