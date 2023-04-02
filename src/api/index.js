@@ -51,21 +51,76 @@ export const getPosts = (page = 1, limit = 5) => {
 
 export const login = (email, password) => {
   return customFetch(API_URLS.login(), {
-  method: 'POST',
-  body: {email, password}
+    method: 'POST',
+    body: { email, password },
   });
-}
+};
 
 export const register = (name, email, password, confirmPassword) => {
   return customFetch(API_URLS.signup(), {
     method: 'POST',
-    body: { name, email, password, confirm_password: confirmPassword}
+    body: { name, email, password, confirm_password: confirmPassword },
   });
-}
+};
 
-export const  editprofile = async(userId, name, password, confirmPassword) => {
+export const editprofile = async (userId, name, password, confirmPassword) => {
   return customFetch(API_URLS.editUser(), {
     method: 'POST',
-    body: { id: userId, name, password, confirm_password: confirmPassword}
+    body: { id: userId, name, password, confirm_password: confirmPassword },
   });
-}
+};
+
+export const fetchUserProfile = (userId) => {
+  return customFetch(API_URLS.userInfo(userId), {
+    method: 'GET',
+  });
+};
+
+export const fetchUserFriends = () => {
+  return customFetch(API_URLS.friends(), {
+    method: 'GET',
+  });
+};
+
+export const addFriend = (userId) => {
+  return customFetch(API_URLS.createFriendship(userId), {
+    method: 'POST',
+  });
+};
+
+export const removeFriend = (userId) => {
+  return customFetch(API_URLS.removeFriend(userId), {
+    method: 'POST',
+  });
+};
+
+export const addPost = (content) => {
+  return customFetch(API_URLS.createPost(), {
+    method: 'POST',
+    body: {
+      content,
+    },
+  });
+};
+
+export const createComment = (content, postId) => {
+  return customFetch(API_URLS.comment(), {
+    method: 'POST',
+    body: {
+      post_id: postId,
+      content,
+    },
+  });
+};
+
+export const toggleLike = (itemId, itemType) => {
+  return customFetch(API_URLS.toggleLike(itemId, itemType), {
+    method: 'POST',
+  });
+};
+
+export const searchUsers = (searchText) => {
+  return customFetch(API_URLS.searchUsers(searchText), {
+    method: 'GET',
+  });
+};

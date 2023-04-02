@@ -1,6 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../providers/AuthProvider';
-import { editprofile, login as userLogin, register } from '../api';
+import { AuthContext, PostsContext } from '../providers';
+import {
+  editprofile,
+  fetchUserFriends,
+  getPosts,
+  login as userLogin,
+  register,
+} from '../api';
 import {
   getItemFromLocalStorage,
   LOCALSTORAGE_TOKEN_KEY,
@@ -8,6 +14,7 @@ import {
   setItemInLocalStorage,
 } from '../utils';
 import jwt from 'jwt-decode';
+import { Navigate } from 'react-router-dom';
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -18,13 +25,28 @@ export const useProvideAuth = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+    const getUser = async () => {
+      const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
 
-    if (userToken) {
-      const user = jwt(userToken);
-      setUser(user);
-    }
-    setLoading(false);
+      if (userToken) {
+        const user = jwt(userToken);
+        console.log(user);
+        const response = await fetchUserFriends();
+        let friends = [];
+        if (response.success) {
+          console.log('+++***+++: getUser success');
+          friends = response.data.friends;
+        } else {
+          console.log('+++***+++: ', response);
+        }
+        setUser({
+          ...user,
+          friends,
+        });
+      }
+      setLoading(false);
+    };
+    getUser();
   }, []);
 
   const updateUser = async (userId, name, password, confirmPassword) => {
@@ -87,6 +109,24 @@ export const useProvideAuth = () => {
     removeItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
   };
 
+  const updateUserFriends = (addFriend, friend) => {
+    if (addFriend) {
+      setUser({
+        ...user,
+        friends: [...user.friends, friend],
+      });
+      return;
+    }
+    const newFriend = user.friends.filter(
+      (f) => f.to_user._id !== friend.to_user._id
+    );
+    setUser({
+      ...user,
+      friends: newFriend,
+    });
+    return;
+  };
+
   return {
     user,
     login,
@@ -94,5 +134,51 @@ export const useProvideAuth = () => {
     logout,
     updateUser,
     loading,
+    updateUserFriends,
+  };
+};
+
+export const usePosts = () => {
+  return useContext(PostsContext);
+};
+
+export const useProvidePosts = () => {
+  const [posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPosts = async () => {
+    const response = await getPosts();
+    if (response.success) {
+      setPosts(response.data.posts);
+    } else {
+      console.error(response.message);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const addPostToState = (post) => {
+    const newPosts = [post, ...posts];
+    setPosts(newPosts);
+  };
+
+  const addComment = (comment, postId) => {
+    const newPosts = posts.map((post) => {
+      if (post._id === postId) {
+        return { ...post, comments: [...post.comments, comment] };
+      }
+      return post;
+    });
+    setPosts(newPosts);
+  };
+
+  return {
+    data: posts,
+    loading,
+    addPostToState,
+    addComment,
   };
 };
